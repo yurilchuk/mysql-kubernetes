@@ -1,0 +1,124 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: mysql-sc
+  namespace: mysql
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+
+---
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: mysql-data-pv
+  namespace: mysql
+spec:
+  storageClassName: mysql-sc
+  capacity:
+    storage: "<STORAGE>"
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  nfs: 
+    path: "<NFS_PATH>"
+    server: "<SERVER_IP>"
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mysql-data-pvc
+  namespace: mysql
+spec:
+  storageClassName: mysql-sc
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: "<STORAGE>"
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: mysql
+  labels:
+    app: mysql
+    visualize: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+      version: "5.6"
+  template:
+    metadata:
+      labels:
+        app: mysql
+        version: "5.6"
+        visualize: "true"
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.6
+        livenessProbe:
+          tcpSocket:
+            port: 3306
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 2
+          timeoutSeconds: 3
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: <ROOT_PASSWORD>
+        ports:
+        - containerPort: 3306
+          name: mysql
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        volumeMounts:
+          # name must match the volume name below
+        - name: mysql-persistent
+          # mount path within the container
+          mountPath: /var/lib/mysql
+        - name: config-map
+          mountPath: /etc/mysql/conf.d
+      volumes:
+      - name: config-map
+        configMap:
+          name: mysql-config
+      - name: mysql-persistent
+        persistentVolumeClaim:
+          claimName: mysql-data-pvc
+
+---
+
+apiVersion: v1
+kind: Service
+metadata: 
+  name: mysql
+  labels:
+    app: mysql
+    visualize: "true"
+spec: 
+  type: LoadBalancer
+  externalTrafficPolicy: Cluster
+  ports:
+    # the port that this service should serve on
+    - port: 3306
+      name: mysql
+      targetPort: 3306
+  # label keys and values that must match in order to receive traffic for this service
+  selector: 
+    app: mysql
+status: {}
