@@ -38,7 +38,7 @@ chmod +x config.sh
 6. Execute o script:
 
 ```bash
-chmod +x config.sh
+./config.sh
 ```
 
 Este script irá baixar o arquivo mysql-kube.yaml do repositório, substituir as variáveis pelo valor do ConfigMap e aplicar o arquivo yaml ao seu cluster.
