@@ -34,7 +34,7 @@ metadata:
 spec:
   storageClassName: mysql-sc
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: "<STORAGE>"
