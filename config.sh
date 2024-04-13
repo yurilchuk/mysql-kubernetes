@@ -4,10 +4,10 @@
 curl -O https://raw.githubusercontent.com/yurilchuk/mysql-kubernetes/main/mysql-kube.yaml
 
 # Obtenha os valores do ConfigMap
-NFS_PATH=$(kubectl get configmap mysql-config -o jsonpath='{.data.mysql-path}')
-SERVER_IP=$(kubectl get configmap mysql-config -o jsonpath='{.data.server-ip}')
-STORAGE=$(kubectl get configmap mysql-config -o jsonpath='{.data.storage}')
-ROOT_PASSWORD=$(kubectl get configmap mysql-config -o jsonpath='{.data.root-password}')
+NFS_PATH=$(kubectl get configmap mysql-config -o jsonpath='{.data.nfs-path}' -n mysql)
+SERVER_IP=$(kubectl get configmap mysql-config -o jsonpath='{.data.server-ip}' -n mysql)
+STORAGE=$(kubectl get configmap mysql-config -o jsonpath='{.data.storage}' -n mysql)
+ROOT_PASSWORD=$(kubectl get configmap mysql-config -o jsonpath='{.data.root-password}' -n mysql)
 
 # Substitua as variáveis no arquivo yaml
 sed -i "s|<NFS_PATH>|${NFS_PATH}|g" mysql-kube.yaml
