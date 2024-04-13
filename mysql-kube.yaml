@@ -175,6 +175,7 @@ spec:
       - path: /
         pathType: Prefix
         backend:
-          name: mysql-service
-          port: 
-            number: 3306
+          service:
+            name: mysql-service
+            port: 
+              number: 3306
