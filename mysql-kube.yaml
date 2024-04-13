@@ -163,7 +163,7 @@ spec:
       name: mysql-service
       port:
         number: 3306
-  ingressClassName: ollama-ingressclass
+  ingressClassName: mysql-ingressclass
   tls:
   - hosts:
     - mysql.nb41.tech
