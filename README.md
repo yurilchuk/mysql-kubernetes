@@ -1,4 +1,4 @@
-# mysql-kubernetes# Configuração do Kubernetes para Ollama
+# Configuração do Kubernetes para MySql
 
 Este repositório contém a configuração do Kubernetes para o MySQL.
 
