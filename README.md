@@ -9,6 +9,26 @@ Este repositório fornece os manifestos e scripts necessários para implantar um
 
 ## Implantação
 
+### Opção 1: Implantação via .sh
+
+1. **Configuração do ConfigMap:**
+   - Edite o arquivo `mysql-config.yaml` no diretório `manifests/` e ajuste os valores conforme necessário.
+
+   - Aplique o ConfigMap:
+     ```bash
+     kubectl apply -f manifests/mysql-config.yaml
+
+2. **Baixe e edite o ConfigMap**  
+   ```bash
+   curl -O https://raw.githubusercontent.com/yurilchuk/mysql-kubernetes/refs/heads/main/config.sh
+
+   - Execute o Config.sh:
+   ```bash
+   ./config.sh
+   
+
+### Opção 2: Implantação Manual
+
 1. **Configuração do ConfigMap:**
    - Edite o arquivo `mysql-config.yaml` no diretório `manifests/` e ajuste os valores conforme necessário.
 
