@@ -1,47 +1,42 @@
-# Configuração do Kubernetes para MySql
+# Configuração do Kubernetes para MySQL
 
-Este repositório contém a configuração do Kubernetes para o MySQL.
+Este repositório fornece os manifestos e scripts necessários para implantar uma instância do MySQL em um cluster Kubernetes.
 
 ## Pré-requisitos
 
-- Você deve ter o [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) instalado.
-- Você deve ter um cluster do Kubernetes configurado e o kubectl deve estar conectado a ele.
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) instalado.
+- Acesso a um cluster Kubernetes configurado.
 
-## Como usar
+## Implantação
 
-1. Baixe o arquivo de configuração do ConfigMap:
+1. **Configuração do ConfigMap:**
+   - Edite o arquivo `mysql-config.yaml` no diretório `manifests/` e ajuste os valores conforme necessário.
 
-```bash
-curl -O https://raw.githubusercontent.com/yurilchuk/mysql-kubernetes/main/mysql-config.yaml
-```
+2. **Aplicação dos Manifests:**
+   - Aplique o ConfigMap:
+     ```bash
+     kubectl apply -f manifests/mysql-config.yaml
+     ```
+   - Aplique o Deployment e o Service:
+     ```bash
+     kubectl apply -f manifests/mysql-deployment.yaml
+     ```
 
-2. Abra o arquivo mysql-config.yaml e substitua nfs-path, server-ip, storage e root-password pelos valores reais.
+3. **Verificação:**
+   - Verifique se o pod do MySQL está em execução:
+     ```bash
+     kubectl get pods -n mysql
+     ```
 
-3. Aplique o arquivo de configuração do ConfigMap ao seu cluster:
+## Solução de Problemas
 
-```bash
-kubectl apply -f mysql-config.yaml
-```
+- **Pod em CrashLoopBackOff:**
+  - Verifique os logs do pod:
+    ```bash
+    kubectl logs <nome-do-pod> -n mysql
+    ```
+  - Se o motivo for `OOMKilled`, considere aumentar os limites de memória no manifesto do deployment.
 
-4. Baixe o script de configuração:
+## Contribuindo
 
-```bash
-curl -O https://raw.githubusercontent.com/yurilchuk/mysql-kubernetes/main/config.sh
-```
-
-5. Torne o script executável:
-
-```bash
-chmod +x config.sh
-```
-
-6. Execute o script:
-
-```bash
-./config.sh
-```
-
-Este script irá baixar o arquivo mysql-kube.yaml do repositório, substituir as variáveis pelo valor do ConfigMap e aplicar o arquivo yaml ao seu cluster.
-
-Contribuindo
-Se você encontrar algum problema ou tiver alguma sugestão de melhoria, sinta-se à vontade para abrir uma issue ou enviar um pull request.
+Sinta-se à vontade para abrir issues ou enviar pull requests com melhorias ou correções.
