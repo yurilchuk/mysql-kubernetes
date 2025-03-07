@@ -64,17 +64,17 @@ spec:
   selector:
     matchLabels:
       app: mysql
-      version: "5.6"
+      version: "8.0"
   template:
     metadata:
       labels:
         app: mysql
-        version: "5.6"
+        version: "8.0"
         visualize: "true"
     spec:
       containers:
       - name: mysql
-        image: mysql:5.6
+        image: mysql:8.0.32
         livenessProbe:
           tcpSocket:
             port: 3306
@@ -165,10 +165,10 @@ spec:
   ingressClassName: mysql-ingressclass
   tls:
   - hosts:
-    - mysql.nb41.tech
+    - mysql.nb41.co
     secretName: mysql-secret
   rules:
-  - host: mysql.nb41.tech
+  - host: mysql.nb41.co
     http:
       paths:
       - path: /

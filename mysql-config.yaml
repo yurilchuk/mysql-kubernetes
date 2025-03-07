@@ -18,7 +18,24 @@ data:
 
   my.cnf: |
     [mysqld]
-    max_connections = 200
+    innodb_buffer_pool_size=1G
+    innodb_log_buffer_size = 64M
+    innodb_file_per_table = 1
+    innodb_flush_log_at_trx_commit = 1
+    innodb_log_file_size = 256M
+    innodb_force_recovery = 1
+    log_bin = /var/lib/mysql/mysql-bin
+    expire_logs_days = 10  # Apaga logs binários antigos após 10 dias
+    sync_binlog = 1
+    table_open_cache = 2048  # Aumenta a capacidade de tabelas abertas simultaneamente
+    table_definition_cache = 1024
+    key_buffer_size = 256M  # Para MyISAM, aumenta o cache de índices
+    slow_query_log = 1
+    slow_query_log_file = /var/lib/mysql/mysql-slow.log
+    long_query_time = 2  # Registra consultas que demoram mais de 2 segundos
+    max_connections = 500
     read_buffer_size = 1048576
     net_read_timeout = 360
     net_write_timeout = 360
+    tmp_table_size = 128M  # Tamanho máximo de tabelas temporárias em memória
+    max_heap_table_size = 128M
